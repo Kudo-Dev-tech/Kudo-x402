@@ -1,4 +1,4 @@
-import type { Plugin } from "@elizaos/core";
+import type { ChannelType, Plugin } from "@elizaos/core";
 import {
   type GenerateTextParams,
   ModelType,
@@ -8,12 +8,21 @@ import {
   type Memory,
   type State,
   logger,
+  AgentRuntime,
+  MemoryType,
 } from "@elizaos/core";
-import { z } from "zod";
+import { check, z } from "zod";
 import { makeTwitterPostAction } from "./actions/makeTwitterPost";
 import { transactCreditCardAction } from "./actions/transactCreditCard";
 import { helloWorldAction } from "./actions/helloWorld";
 import { KudoDemoService } from "./services/kudoDemoService";
+import { proveIncome } from "./actions/proveIncome";
+import {
+  checkOwnership,
+  proveIncomeFunction,
+  registerAgent,
+} from "./registrationFlowFunctions";
+import { KudoRegistrationService } from "./services/kudoRegistrationService";
 
 /**
  * Define the configuration schema for the plugin with the following properties:
@@ -64,8 +73,9 @@ const plugin: Plugin = {
   config: {
     KUDO_DEMO_VARIABLE: process.env.KUDO_DEMO_VARIABLE,
   },
-  async init(config: Record<string, string>) {
+  async init(config: Record<string, string>, runtime: IAgentRuntime) {
     logger.info("*** Initializing kudo-demo plugin ***");
+
     try {
       const validatedConfig = await configSchema.parseAsync(config);
 
@@ -146,8 +156,13 @@ const plugin: Plugin = {
       },
     ],
   },
-  services: [KudoDemoService],
-  actions: [makeTwitterPostAction, transactCreditCardAction, helloWorldAction],
+  services: [KudoRegistrationService, KudoDemoService],
+  actions: [
+    makeTwitterPostAction,
+    transactCreditCardAction,
+    helloWorldAction,
+    proveIncome,
+  ],
   providers: [helloWorldProvider],
 };
 

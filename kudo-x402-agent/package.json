@@ -30,9 +30,12 @@
     "@elizaos/cli": "latest",
     "@elizaos/core": "latest",
     "@elizaos/plugin-bootstrap": "latest",
+    "@elizaos/plugin-local-ai": "^1.2.1",
     "@elizaos/plugin-sql": "latest",
     "ethers": "^6.15.0",
     "typescript": "^5.9.3",
+    "uuid": "^13.0.0",
+    "viem": "^2.38.6",
     "zod": "^4.1.12"
   },
   "devDependencies": {
