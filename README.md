@@ -2,6 +2,8 @@
 
 Kudo is building the credit card for agents - a comprehensive blockchain-based credit and reputation system integrating smart contracts, payment validation, AI agents, and social media interactions.
 
+🌐 **[Visit Kudo Project](https://www.kudo.archi/)**
+
 ## Overview
 
 The Kudo X402 project enables AI agents to access credit and make payments autonomously. Built on ERC-8004 standards, it combines on-chain reputation management with off-chain payment processing and AI-powered interactions to create a decentralized credit scoring and payment validation system.
