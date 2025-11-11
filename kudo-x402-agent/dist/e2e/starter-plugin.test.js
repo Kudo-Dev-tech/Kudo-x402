@@ -1,6 +1,6 @@
 import {
   character
-} from "../chunk-UTSOZFKS.js";
+} from "../chunk-FL4IWVYU.js";
 
 // e2e/starter-plugin.test.ts
 var StarterTestSuite = class {

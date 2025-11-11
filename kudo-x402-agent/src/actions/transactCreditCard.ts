@@ -22,13 +22,14 @@ async function generateCovenantSignature(
   covenantAsk: string,
   nftType: string,
   recipient: string,
+  debtAmount: string
 ): Promise<{ signature: string; v: number; r: string; s: string }> {
   // ABI encode the parameters
   const abiCoder = ethers.AbiCoder.defaultAbiCoder();
 
   const encoded = abiCoder.encode(
-    ["string", "string", "string", "address", "address"],
-    [covenantPromise, covenantAsk, nftType, agentAddr, recipient],
+    ["string", "string", "string", "address", "uint256", "address"],
+    [covenantPromise, covenantAsk, nftType, agentAddr, debtAmount, recipient],
   );
 
   // Sign the encoded data
@@ -118,6 +119,7 @@ export const transactCreditCardAction: Action = {
         covenantResult.object.covenantAsk,
         nftType,
         "0x1BAB12dd29E89455752613055EC6036eD6c17ccf",
+        covenantResult.object.debtAmount
       );
 
       paymentRequirements.extra = {
@@ -130,6 +132,7 @@ export const transactCreditCardAction: Action = {
           },
           covenantPromise: covenantResult.object.covenantPromise,
           covenantAsk: covenantResult.object.covenantAsk,
+          debtAmount: covenantResult.object.debtAmount,
         },
       };
 

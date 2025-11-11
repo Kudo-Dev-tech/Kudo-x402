@@ -14,6 +14,8 @@ import { makeTwitterPostAction } from "./actions/makeTwitterPost";
 import { transactCreditCardAction } from "./actions/transactCreditCard";
 import { helloWorldAction } from "./actions/helloWorld";
 import { KudoDemoService } from "./services/kudoDemoService";
+import { KudoValidatorService } from "./services/kudoValidationService";
+import { checkValidationAction } from "./actions/checkValidation";
 
 /**
  * Define the configuration schema for the plugin with the following properties:
@@ -146,9 +148,9 @@ const plugin: Plugin = {
       },
     ],
   },
-  services: [KudoDemoService],
-  actions: [makeTwitterPostAction, transactCreditCardAction, helloWorldAction],
-  providers: [helloWorldProvider],
+  services: [KudoValidatorService],
+  actions: [checkValidationAction],
+  providers: [],
 };
 
 export default plugin;

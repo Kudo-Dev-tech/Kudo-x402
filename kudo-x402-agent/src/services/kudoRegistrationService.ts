@@ -12,17 +12,8 @@ export class KudoRegistrationService extends Service {
   capabilityDescription =
     "This is a kudo registration service which aims to register the agent in the contract.";
 
-  private intervalId: NodeJS.Timeout | null = null;
-  private intervalMs: number;
-
   constructor(runtime: IAgentRuntime) {
     super(runtime);
-
-    // Get interval from env var, default to 60000ms (1 minute)
-    const intervalEnv = runtime.getSetting("KUDO_JOB_INTERVAL_MS");
-    this.intervalMs = intervalEnv ? parseInt(intervalEnv, 10) : 60000;
-
-    logger.info(`Kudo job interval set to ${this.intervalMs}ms`);
   }
 
   static async start(runtime: IAgentRuntime) {
@@ -36,8 +27,13 @@ export class KudoRegistrationService extends Service {
       });
 
       if (!previousAgentIDList.length) {
-        const { hash, agentId } = await registerAgent(runtime);
+        /**
+         * 
+         * const { hash, agentId } = await registerAgent(runtime);
         await proveIncomeFunction(agentId.toString());
+         */
+
+        const agentId = BigInt(449)
         await runtime.createMemory(
           {
             agentId: runtime.agentId,
@@ -78,12 +74,6 @@ export class KudoRegistrationService extends Service {
   }
 
   async stop() {
-    logger.info("*** Stopping kudo-demo service instance ***");
-
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-      logger.info("Kudo job interval stopped");
-    }
+    logger.info("*** Stopping kudo-registration service instance ***");
   }
 }

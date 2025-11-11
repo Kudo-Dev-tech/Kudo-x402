@@ -27,6 +27,7 @@ You MUST respond with ONLY a valid JSON object with the following structure (no 
   "signature": "string - A cryptographic signature placeholder (use empty string)",
   "covenantPromise": "string - A formal promise statement like 'I promise to pay back [amount] USDC on [date] at [time] UTC' based on the payment details in the message",
   "covenantAsk": "string - The action being requested, stated directly without mentioning payment or repayment. For example: 'Post a tweet' not 'In exchange for posting a tweet I will...'"
+  "debtAmount": "string - The repayment amount in USDC with 6 decimal places. For example, 1 USDC = '1000000', 0.5 USDC = '500000'"
 }
 
 Generate a valid JSON object following this exact structure. Format the promise and ask professionally and clearly.`;

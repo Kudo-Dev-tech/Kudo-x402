@@ -41,6 +41,12 @@ The Kudo X402 project demonstrates a decentralized credit scoring and payment va
   - Kudo service integration
   - Evaluation and testing suite
 
+- **x402-demo-validator/** - ElizaOS plugin for payment validation and credit scoring
+  - On-chain validation checking
+  - Payment history verification
+  - Credit score evaluation
+  - Integration with Kudo smart contracts
+
 ## Getting Started
 
 ### Prerequisites
@@ -75,6 +81,10 @@ bun install
 
 # Install Twitter MCP server dependencies
 cd ../kudo-x402-twitter-mcp-server
+npm install
+
+# Install demo validator dependencies
+cd ../x402-demo-validator
 npm install
 ```
 
@@ -148,6 +158,9 @@ cd kudo-x402-agent && npm test
 
 # Twitter MCP server tests
 cd kudo-x402-twitter-mcp-server && npm test
+
+# Demo validator tests
+cd x402-demo-validator && npm test
 ```
 
 ### Environment Variables

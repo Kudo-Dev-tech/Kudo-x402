@@ -173,6 +173,7 @@ export async function validateAgent(
   requestUri: string,
   requestHash: Address,
 ) {
+  console.log("Validating agent...")
   const walletClient = createWalletClient({
     account: process.env.PRIVATE_KEY as Address,
     chain: baseSepolia,

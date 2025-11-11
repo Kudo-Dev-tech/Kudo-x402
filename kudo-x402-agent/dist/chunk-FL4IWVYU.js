@@ -47,6 +47,7 @@ You MUST respond with ONLY a valid JSON object with the following structure (no 
   "signature": "string - A cryptographic signature placeholder (use empty string)",
   "covenantPromise": "string - A formal promise statement like 'I promise to pay back [amount] USDC on [date] at [time] UTC' based on the payment details in the message",
   "covenantAsk": "string - The action being requested, stated directly without mentioning payment or repayment. For example: 'Post a tweet' not 'In exchange for posting a tweet I will...'"
+  "debtAmount": "string - The repayment amount in USDC with 6 decimal places. For example, 1 USDC = '1000000', 0.5 USDC = '500000'"
 }
 
 Generate a valid JSON object following this exact structure. Format the promise and ask professionally and clearly.`;
@@ -69,11 +70,11 @@ Respond with a JSON object in the following format:
 }`;
 
 // src/actions/transactCreditCard.ts
-async function generateCovenantSignature(privateKey, agentAddr, covenantPromise, covenantAsk, nftType, recipient) {
+async function generateCovenantSignature(privateKey, agentAddr, covenantPromise, covenantAsk, nftType, recipient, debtAmount) {
   const abiCoder = ethers.AbiCoder.defaultAbiCoder();
   const encoded = abiCoder.encode(
-    ["string", "string", "string", "address", "address"],
-    [covenantPromise, covenantAsk, nftType, agentAddr, recipient]
+    ["string", "string", "string", "address", "uint256", "address"],
+    [covenantPromise, covenantAsk, nftType, agentAddr, debtAmount, recipient]
   );
   const wallet = new ethers.Wallet(privateKey);
   const messageHash = ethers.keccak256(encoded);
@@ -130,7 +131,8 @@ var transactCreditCardAction = {
         covenantResult.object.covenantPromise,
         covenantResult.object.covenantAsk,
         nftType,
-        "0x1BAB12dd29E89455752613055EC6036eD6c17ccf"
+        "0x1BAB12dd29E89455752613055EC6036eD6c17ccf",
+        covenantResult.object.debtAmount
       );
       paymentRequirements.extra = {
         kudoPaymentParams: {
@@ -141,7 +143,8 @@ var transactCreditCardAction = {
             s: signatureData.s
           },
           covenantPromise: covenantResult.object.covenantPromise,
-          covenantAsk: covenantResult.object.covenantAsk
+          covenantAsk: covenantResult.object.covenantAsk,
+          debtAmount: covenantResult.object.debtAmount
         }
       };
       const paymentRequirementsText = JSON.stringify(paymentRequirements);
@@ -2299,918 +2302,6 @@ var KudoABI = [
 import {
   logger as logger4
 } from "@elizaos/core";
-
-// src/registryABI.ts
-var registryABI = [
-  {
-    type: "constructor",
-    inputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "UPGRADE_INTERFACE_VERSION",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "string",
-        internalType: "string"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "approve",
-    inputs: [
-      {
-        name: "to",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "tokenId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ],
-    outputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "balanceOf",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address"
-      }
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "getApproved",
-    inputs: [
-      {
-        name: "tokenId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "getMetadata",
-    inputs: [
-      {
-        name: "agentId",
-        type: "uint256",
-        internalType: "uint256"
-      },
-      {
-        name: "key",
-        type: "string",
-        internalType: "string"
-      }
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "bytes",
-        internalType: "bytes"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "getVersion",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "string",
-        internalType: "string"
-      }
-    ],
-    stateMutability: "pure"
-  },
-  {
-    type: "function",
-    name: "initialize",
-    inputs: [],
-    outputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "isApprovedForAll",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "operator",
-        type: "address",
-        internalType: "address"
-      }
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "bool",
-        internalType: "bool"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "name",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "string",
-        internalType: "string"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "owner",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "ownerOf",
-    inputs: [
-      {
-        name: "tokenId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "proxiableUUID",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "bytes32",
-        internalType: "bytes32"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "register",
-    inputs: [],
-    outputs: [
-      {
-        name: "agentId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "register",
-    inputs: [
-      {
-        name: "tokenUri",
-        type: "string",
-        internalType: "string"
-      },
-      {
-        name: "metadata",
-        type: "tuple[]",
-        internalType: "struct IdentityRegistryUpgradeable.MetadataEntry[]",
-        components: [
-          {
-            name: "key",
-            type: "string",
-            internalType: "string"
-          },
-          {
-            name: "value",
-            type: "bytes",
-            internalType: "bytes"
-          }
-        ]
-      }
-    ],
-    outputs: [
-      {
-        name: "agentId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "register",
-    inputs: [
-      {
-        name: "tokenUri",
-        type: "string",
-        internalType: "string"
-      }
-    ],
-    outputs: [
-      {
-        name: "agentId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "renounceOwnership",
-    inputs: [],
-    outputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "safeTransferFrom",
-    inputs: [
-      {
-        name: "from",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "to",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "tokenId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ],
-    outputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "safeTransferFrom",
-    inputs: [
-      {
-        name: "from",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "to",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "tokenId",
-        type: "uint256",
-        internalType: "uint256"
-      },
-      {
-        name: "data",
-        type: "bytes",
-        internalType: "bytes"
-      }
-    ],
-    outputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "setAgentUri",
-    inputs: [
-      {
-        name: "agentId",
-        type: "uint256",
-        internalType: "uint256"
-      },
-      {
-        name: "newUri",
-        type: "string",
-        internalType: "string"
-      }
-    ],
-    outputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "setApprovalForAll",
-    inputs: [
-      {
-        name: "operator",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "approved",
-        type: "bool",
-        internalType: "bool"
-      }
-    ],
-    outputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "setMetadata",
-    inputs: [
-      {
-        name: "agentId",
-        type: "uint256",
-        internalType: "uint256"
-      },
-      {
-        name: "key",
-        type: "string",
-        internalType: "string"
-      },
-      {
-        name: "value",
-        type: "bytes",
-        internalType: "bytes"
-      }
-    ],
-    outputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "supportsInterface",
-    inputs: [
-      {
-        name: "interfaceId",
-        type: "bytes4",
-        internalType: "bytes4"
-      }
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "bool",
-        internalType: "bool"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "symbol",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "string",
-        internalType: "string"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "tokenURI",
-    inputs: [
-      {
-        name: "tokenId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "string",
-        internalType: "string"
-      }
-    ],
-    stateMutability: "view"
-  },
-  {
-    type: "function",
-    name: "transferFrom",
-    inputs: [
-      {
-        name: "from",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "to",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "tokenId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ],
-    outputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "transferOwnership",
-    inputs: [
-      {
-        name: "newOwner",
-        type: "address",
-        internalType: "address"
-      }
-    ],
-    outputs: [],
-    stateMutability: "nonpayable"
-  },
-  {
-    type: "function",
-    name: "upgradeToAndCall",
-    inputs: [
-      {
-        name: "newImplementation",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "data",
-        type: "bytes",
-        internalType: "bytes"
-      }
-    ],
-    outputs: [],
-    stateMutability: "payable"
-  },
-  {
-    type: "event",
-    name: "Approval",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      },
-      {
-        name: "approved",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      },
-      {
-        name: "tokenId",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "event",
-    name: "ApprovalForAll",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      },
-      {
-        name: "operator",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      },
-      {
-        name: "approved",
-        type: "bool",
-        indexed: false,
-        internalType: "bool"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "event",
-    name: "BatchMetadataUpdate",
-    inputs: [
-      {
-        name: "_fromTokenId",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256"
-      },
-      {
-        name: "_toTokenId",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "event",
-    name: "Initialized",
-    inputs: [
-      {
-        name: "version",
-        type: "uint64",
-        indexed: false,
-        internalType: "uint64"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "event",
-    name: "MetadataSet",
-    inputs: [
-      {
-        name: "agentId",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256"
-      },
-      {
-        name: "indexedKey",
-        type: "string",
-        indexed: true,
-        internalType: "string"
-      },
-      {
-        name: "key",
-        type: "string",
-        indexed: false,
-        internalType: "string"
-      },
-      {
-        name: "value",
-        type: "bytes",
-        indexed: false,
-        internalType: "bytes"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "event",
-    name: "MetadataUpdate",
-    inputs: [
-      {
-        name: "_tokenId",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "event",
-    name: "OwnershipTransferred",
-    inputs: [
-      {
-        name: "previousOwner",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      },
-      {
-        name: "newOwner",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "event",
-    name: "Registered",
-    inputs: [
-      {
-        name: "agentId",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256"
-      },
-      {
-        name: "tokenURI",
-        type: "string",
-        indexed: false,
-        internalType: "string"
-      },
-      {
-        name: "owner",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "event",
-    name: "Transfer",
-    inputs: [
-      {
-        name: "from",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      },
-      {
-        name: "to",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      },
-      {
-        name: "tokenId",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "event",
-    name: "Upgraded",
-    inputs: [
-      {
-        name: "implementation",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "event",
-    name: "UriUpdated",
-    inputs: [
-      {
-        name: "agentId",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256"
-      },
-      {
-        name: "newUri",
-        type: "string",
-        indexed: false,
-        internalType: "string"
-      },
-      {
-        name: "updatedBy",
-        type: "address",
-        indexed: true,
-        internalType: "address"
-      }
-    ],
-    anonymous: false
-  },
-  {
-    type: "error",
-    name: "AddressEmptyCode",
-    inputs: [
-      {
-        name: "target",
-        type: "address",
-        internalType: "address"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "ERC1967InvalidImplementation",
-    inputs: [
-      {
-        name: "implementation",
-        type: "address",
-        internalType: "address"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "ERC1967NonPayable",
-    inputs: []
-  },
-  {
-    type: "error",
-    name: "ERC721IncorrectOwner",
-    inputs: [
-      {
-        name: "sender",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "tokenId",
-        type: "uint256",
-        internalType: "uint256"
-      },
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "ERC721InsufficientApproval",
-    inputs: [
-      {
-        name: "operator",
-        type: "address",
-        internalType: "address"
-      },
-      {
-        name: "tokenId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "ERC721InvalidApprover",
-    inputs: [
-      {
-        name: "approver",
-        type: "address",
-        internalType: "address"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "ERC721InvalidOperator",
-    inputs: [
-      {
-        name: "operator",
-        type: "address",
-        internalType: "address"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "ERC721InvalidOwner",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "ERC721InvalidReceiver",
-    inputs: [
-      {
-        name: "receiver",
-        type: "address",
-        internalType: "address"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "ERC721InvalidSender",
-    inputs: [
-      {
-        name: "sender",
-        type: "address",
-        internalType: "address"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "ERC721NonexistentToken",
-    inputs: [
-      {
-        name: "tokenId",
-        type: "uint256",
-        internalType: "uint256"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "FailedCall",
-    inputs: []
-  },
-  {
-    type: "error",
-    name: "InvalidInitialization",
-    inputs: []
-  },
-  {
-    type: "error",
-    name: "NotInitializing",
-    inputs: []
-  },
-  {
-    type: "error",
-    name: "OwnableInvalidOwner",
-    inputs: [
-      {
-        name: "owner",
-        type: "address",
-        internalType: "address"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "OwnableUnauthorizedAccount",
-    inputs: [
-      {
-        name: "account",
-        type: "address",
-        internalType: "address"
-      }
-    ]
-  },
-  {
-    type: "error",
-    name: "UUPSUnauthorizedCallContext",
-    inputs: []
-  },
-  {
-    type: "error",
-    name: "UUPSUnsupportedProxiableUUID",
-    inputs: [
-      {
-        name: "slot",
-        type: "bytes32",
-        internalType: "bytes32"
-      }
-    ]
-  }
-];
-
-// src/registrationFlowFunctions.ts
 import { http } from "viem";
 import { createWalletClient, createPublicClient } from "viem";
 
@@ -4306,35 +3397,8 @@ async function proveIncomeFunction(agentId) {
     return { success: false };
   }
 }
-async function registerAgent(runtime) {
-  const walletClient = createWalletClient({
-    account: process.env.PRIVATE_KEY,
-    chain: baseSepolia,
-    transport: http(process.env.RPC_ENDPOINT)
-  });
-  const publicClient = createPublicClient({
-    chain: baseSepolia,
-    transport: http(process.env.RPC_ENDPOINT)
-  });
-  const { result, request } = await publicClient.simulateContract({
-    address: process.env.REGISTRY_CONTRACT_ADDR,
-    abi: registryABI,
-    functionName: "register",
-    chain: baseSepolia,
-    account: privateKeyToAccount(process.env.PRIVATE_KEY),
-    args: []
-  });
-  try {
-    const hash = await walletClient.writeContract(request);
-    logger4.info("Registration is successful, with hash:", hash);
-    logger4.info("Registration is successful, with agentId:", result);
-    return { hash, agentId: result };
-  } catch (error) {
-    logger4.info("Registration is unsuccesful:", error);
-    return { success: false };
-  }
-}
 async function validateAgent(validatorAddress, agentId, requestUri, requestHash) {
+  console.log("Validating agent...");
   const walletClient = createWalletClient({
     account: process.env.PRIVATE_KEY,
     chain: baseSepolia,
@@ -4345,7 +3409,7 @@ async function validateAgent(validatorAddress, agentId, requestUri, requestHash)
     transport: http(process.env.RPC_ENDPOINT)
   });
   const { result, request } = await publicClient.simulateContract({
-    address: process.env.REGISTRY_CONTRACT_ADDR,
+    address: process.env.VALIDATION_REGISTRY_ADDR,
     abi: validationRegistryABI,
     functionName: "validationRequest",
     chain: baseSepolia,
@@ -4455,12 +3519,11 @@ Extract the USDC amount that needs to be repaid. Respond with a JSON object in t
         tableName: "agentInfo",
         count: 100
       });
-      console.log("Here is the storedMemory:", storedMemory);
       const agentId = BigInt(storedMemory[0].content.text);
-      const requestUri = settlementTx.requestUri;
-      const requestHash = settlementReceipt.hash;
+      const requestUri = `${nftId}`;
+      const requestHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`;
       await validateAgent(
-        process.env.VALIDATOR_ADDR,
+        process.env.PAYMENT_HISTORY_ADDR,
         agentId,
         requestUri,
         requestHash
@@ -4499,7 +3562,7 @@ Extract the USDC amount that needs to be repaid. Respond with a JSON object in t
       const allCovenantDetails = await contract.getCovenantsDetails();
       const agentCovenants = allCovenantDetails.filter(
         (covenantDetail) => {
-          return covenantDetail.covenantData.agentWallet.toLowerCase() === agentAddress.toLowerCase() && !covenantDetail.covenantData.promiseSettlementData && !!covenantDetail.covenantData.askSettlementData;
+          return covenantDetail.covenantData.agentWallet.toLowerCase() === agentAddress.toLowerCase() && covenantDetail.covenantData.status !== 1 && !!covenantDetail.covenantData.askSettlementData;
         }
       );
       logger5.info(
@@ -4568,13 +3631,8 @@ import { Service as Service2, logger as logger6 } from "@elizaos/core";
 var KudoRegistrationService = class _KudoRegistrationService extends Service2 {
   static serviceType = "kudo-registration";
   capabilityDescription = "This is a kudo registration service which aims to register the agent in the contract.";
-  intervalId = null;
-  intervalMs;
   constructor(runtime) {
     super(runtime);
-    const intervalEnv = runtime.getSetting("KUDO_JOB_INTERVAL_MS");
-    this.intervalMs = intervalEnv ? parseInt(intervalEnv, 10) : 6e4;
-    logger6.info(`Kudo job interval set to ${this.intervalMs}ms`);
   }
   static async start(runtime) {
     logger6.info("*** Starting kudo-registration service ***");
@@ -4586,8 +3644,7 @@ var KudoRegistrationService = class _KudoRegistrationService extends Service2 {
         count: 100
       });
       if (!previousAgentIDList.length) {
-        const { hash, agentId } = await registerAgent(runtime);
-        await proveIncomeFunction(agentId.toString());
+        const agentId = BigInt(449);
         await runtime.createMemory(
           {
             agentId: runtime.agentId,
@@ -4621,12 +3678,7 @@ var KudoRegistrationService = class _KudoRegistrationService extends Service2 {
     service.stop();
   }
   async stop() {
-    logger6.info("*** Stopping kudo-demo service instance ***");
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-      logger6.info("Kudo job interval stopped");
-    }
+    logger6.info("*** Stopping kudo-registration service instance ***");
   }
 };
 
@@ -4871,4 +3923,4 @@ export {
   projectAgent,
   src_default
 };
-//# sourceMappingURL=chunk-UTSOZFKS.js.map
+//# sourceMappingURL=chunk-FL4IWVYU.js.map

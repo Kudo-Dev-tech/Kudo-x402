@@ -1,1658 +1,1889 @@
-export const KudoABI = [
+import { Abi } from "viem";
+
+export const KudoABI: Abi = [
   {
+    type: "constructor",
     inputs: [
       {
-        internalType: "address",
-        name: "identityRegistry",
-        type: "address",
+        name: "creditLimit",
+        type: "uint256",
+        internalType: "uint256",
       },
       {
-        internalType: "address",
-        name: "validationRegistry",
+        name: "incomeHistory",
         type: "address",
+        internalType: "address",
       },
       {
+        name: "paymentHistory",
+        type: "address",
         internalType: "address",
+      },
+      {
         name: "admin",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "uint48",
         name: "initialDelay",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
     stateMutability: "nonpayable",
-    type: "constructor",
   },
   {
-    inputs: [],
-    name: "AccessControlBadConfirmation",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint48",
-        name: "schedule",
-        type: "uint48",
-      },
-    ],
-    name: "AccessControlEnforcedDefaultAdminDelay",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "AccessControlEnforcedDefaultAdminRules",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "defaultAdmin",
-        type: "address",
-      },
-    ],
-    name: "AccessControlInvalidDefaultAdmin",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        internalType: "bytes32",
-        name: "neededRole",
-        type: "bytes32",
-      },
-    ],
-    name: "AccessControlUnauthorizedAccount",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "AccessForbidden",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "AgentRegistered",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "ConditionIsNotMet",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-    ],
-    name: "ERC721IncorrectOwner",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "ERC721InsufficientApproval",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "approver",
-        type: "address",
-      },
-    ],
-    name: "ERC721InvalidApprover",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "ERC721InvalidOperator",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-    ],
-    name: "ERC721InvalidOwner",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "receiver",
-        type: "address",
-      },
-    ],
-    name: "ERC721InvalidReceiver",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-    ],
-    name: "ERC721InvalidSender",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "ERC721NonexistentToken",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidCovenantStatus",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidParameter",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidSignature",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint8",
-        name: "bits",
-        type: "uint8",
-      },
-      {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-    ],
-    name: "SafeCastOverflowedUintDowncast",
-    type: "error",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "agentWallet",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "agentName",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "agentId",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "teeId",
-        type: "string",
-      },
-    ],
-    name: "AgentSet",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "approved",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "Approval",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "approved",
-        type: "bool",
-      },
-    ],
-    name: "ApprovalForAll",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "nftId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "askSettlement",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "promiseDetails",
-        type: "string",
-      },
-    ],
-    name: "AskSettlementSet",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "nftId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "enum Kudo.CovenantStatus",
-        name: "status",
-        type: "uint8",
-      },
-    ],
-    name: "CovenantAskSet",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "nftId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "agent",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "nftType",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "covenantPromise",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "ask",
-        type: "string",
-      },
-    ],
-    name: "CovenantMinted",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "nftId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "enum Kudo.CovenantStatus",
-        name: "status",
-        type: "uint8",
-      },
-    ],
-    name: "CovenantPromiseSet",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "bytes32",
-        name: "requestId",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "agentWallet",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "nftId",
-        type: "uint256",
-      },
-    ],
-    name: "CovenantRegistered",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [],
-    name: "DefaultAdminDelayChangeCanceled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint48",
-        name: "newDelay",
-        type: "uint48",
-      },
-      {
-        indexed: false,
-        internalType: "uint48",
-        name: "effectSchedule",
-        type: "uint48",
-      },
-    ],
-    name: "DefaultAdminDelayChangeScheduled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [],
-    name: "DefaultAdminTransferCanceled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "newAdmin",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint48",
-        name: "acceptSchedule",
-        type: "uint48",
-      },
-    ],
-    name: "DefaultAdminTransferScheduled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "nftId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "promiseSettlement",
-        type: "string",
-      },
-    ],
-    name: "PromiseSettlementSet",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "previousAdminRole",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "newAdminRole",
-        type: "bytes32",
-      },
-    ],
-    name: "RoleAdminChanged",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-    ],
-    name: "RoleGranted",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-    ],
-    name: "RoleRevoked",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "Transfer",
-    type: "event",
-  },
-  {
-    inputs: [],
+    type: "function",
     name: "DEFAULT_ADMIN_ROLE",
+    inputs: [],
     outputs: [
       {
-        internalType: "bytes32",
         name: "",
         type: "bytes32",
+        internalType: "bytes32",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "EVALUATOR_CONTRACT_ROLE",
+    inputs: [],
     outputs: [
       {
-        internalType: "bytes32",
         name: "",
         type: "bytes32",
+        internalType: "bytes32",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "acceptDefaultAdminTransfer",
+    inputs: [],
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "approve",
     inputs: [
       {
-        internalType: "address",
         name: "to",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "uint256",
         name: "tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "approve",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "balanceOf",
     inputs: [
       {
-        internalType: "address",
         name: "owner",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "balanceOf",
     outputs: [
       {
-        internalType: "uint256",
         name: "",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "beginDefaultAdminTransfer",
     inputs: [
       {
-        internalType: "address",
         name: "newAdmin",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "beginDefaultAdminTransfer",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [],
-    name: "cancelDefaultAdminTransfer",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
-  },
-  {
+    name: "calculateCreditLimit",
     inputs: [
       {
-        internalType: "uint48",
+        name: "creditScore",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "maxLimit",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "pure",
+  },
+  {
+    type: "function",
+    name: "cancelDefaultAdminTransfer",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "changeDefaultAdminDelay",
+    inputs: [
+      {
         name: "newDelay",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
-    name: "changeDefaultAdminDelay",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "defaultAdmin",
+    inputs: [],
     outputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "defaultAdminDelay",
-    outputs: [
-      {
-        internalType: "uint48",
-        name: "",
-        type: "uint48",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "defaultAdminDelayIncreaseWait",
-    outputs: [
-      {
-        internalType: "uint48",
-        name: "",
-        type: "uint48",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "requestHash",
-        type: "bytes32",
-      },
-      {
-        internalType: "uint256",
-        name: "nftId",
-        type: "uint256",
-      },
-      {
-        internalType: "enum Kudo.CovenantStatus",
-        name: "status",
-        type: "uint8",
-      },
-      {
-        internalType: "uint8",
-        name: "response",
-        type: "uint8",
-      },
-      {
-        internalType: "string",
-        name: "responseUri",
-        type: "string",
-      },
-      {
-        internalType: "bytes32",
-        name: "tag",
-        type: "bytes32",
-      },
-    ],
-    name: "evaluateSettlementData",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "defaultAdminDelay",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint48",
+        internalType: "uint48",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "defaultAdminDelayIncreaseWait",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint48",
+        internalType: "uint48",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getAgentAvailableCredit",
+    inputs: [
+      {
         name: "agent",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "getAgentCovenantsData",
     outputs: [
       {
-        components: [
-          {
-            internalType: "address",
-            name: "agentWallet",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "agentId",
-            type: "uint256",
-          },
-          {
-            internalType: "enum Kudo.CovenantStatus",
-            name: "status",
-            type: "uint8",
-          },
-          {
-            internalType: "string",
-            name: "nftType",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "ask",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "covenantPromise",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "promiseDetail",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "promiseSettlementData",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "askSettlementData",
-            type: "string",
-          },
-          {
-            internalType: "uint128",
-            name: "abilityScore",
-            type: "uint128",
-          },
-        ],
-        internalType: "struct Kudo.CovenantData[]",
         name: "",
-        type: "tuple[]",
+        type: "uint256",
+        internalType: "uint256",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "getAgentCovenantsData",
     inputs: [
       {
+        name: "agent",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "tuple[]",
+        internalType: "struct Kudo.CovenantData[]",
+        components: [
+          {
+            name: "agentWallet",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "agentId",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "status",
+            type: "uint8",
+            internalType: "enum Kudo.CovenantStatus",
+          },
+          {
+            name: "nftType",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "ask",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "covenantPromise",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "promiseDetail",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "askSettlementData",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "promiseSettlementData",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "abilityScore",
+            type: "uint128",
+            internalType: "uint128",
+          },
+          {
+            name: "debtAmount",
+            type: "uint256",
+            internalType: "uint256",
+          },
+        ],
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getAgentCreditLimit",
+    inputs: [
+      {
+        name: "agent",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
         internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getAgentCreditScore",
+    inputs: [
+      {
+        name: "agent",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getAgentDebt",
+    inputs: [
+      {
+        name: "agent",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getApproved",
+    inputs: [
+      {
         name: "tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "getApproved",
     outputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "getCovenant",
     inputs: [
       {
-        internalType: "uint256",
         name: "nftId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "getCovenant",
     outputs: [
       {
+        name: "",
+        type: "tuple",
+        internalType: "struct Kudo.CovenantData",
         components: [
           {
-            internalType: "address",
             name: "agentWallet",
             type: "address",
+            internalType: "address",
           },
           {
-            internalType: "uint256",
             name: "agentId",
             type: "uint256",
+            internalType: "uint256",
           },
           {
-            internalType: "enum Kudo.CovenantStatus",
             name: "status",
             type: "uint8",
+            internalType: "enum Kudo.CovenantStatus",
           },
           {
-            internalType: "string",
             name: "nftType",
             type: "string",
+            internalType: "string",
           },
           {
-            internalType: "string",
             name: "ask",
             type: "string",
+            internalType: "string",
           },
           {
-            internalType: "string",
             name: "covenantPromise",
             type: "string",
+            internalType: "string",
           },
           {
-            internalType: "string",
             name: "promiseDetail",
             type: "string",
+            internalType: "string",
           },
           {
-            internalType: "string",
-            name: "promiseSettlementData",
-            type: "string",
-          },
-          {
-            internalType: "string",
             name: "askSettlementData",
             type: "string",
+            internalType: "string",
           },
           {
-            internalType: "uint128",
+            name: "promiseSettlementData",
+            type: "string",
+            internalType: "string",
+          },
+          {
             name: "abilityScore",
             type: "uint128",
+            internalType: "uint128",
+          },
+          {
+            name: "debtAmount",
+            type: "uint256",
+            internalType: "uint256",
           },
         ],
-        internalType: "struct Kudo.CovenantData",
-        name: "",
-        type: "tuple",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "getCovenantDetails",
     inputs: [
       {
-        internalType: "uint256",
         name: "nftId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "getCovenantDetails",
     outputs: [
       {
-        components: [
-          {
-            internalType: "uint256",
-            name: "nftId",
-            type: "uint256",
-          },
-          {
-            internalType: "string",
-            name: "agentName",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "agentId",
-            type: "string",
-          },
-          {
-            internalType: "address",
-            name: "owner",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "promiseSettlementData",
-            type: "string",
-          },
-          {
-            components: [
-              {
-                internalType: "address",
-                name: "agentWallet",
-                type: "address",
-              },
-              {
-                internalType: "uint256",
-                name: "agentId",
-                type: "uint256",
-              },
-              {
-                internalType: "enum Kudo.CovenantStatus",
-                name: "status",
-                type: "uint8",
-              },
-              {
-                internalType: "string",
-                name: "nftType",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "ask",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "covenantPromise",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "promiseDetail",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "promiseSettlementData",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "askSettlementData",
-                type: "string",
-              },
-              {
-                internalType: "uint128",
-                name: "abilityScore",
-                type: "uint128",
-              },
-            ],
-            internalType: "struct Kudo.CovenantData",
-            name: "covenantData",
-            type: "tuple",
-          },
-        ],
-        internalType: "struct Kudo.CovenantDetails",
         name: "",
         type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getCovenantsDetails",
-    outputs: [
-      {
+        internalType: "struct Kudo.CovenantDetails",
         components: [
           {
-            internalType: "uint256",
             name: "nftId",
             type: "uint256",
+            internalType: "uint256",
           },
           {
-            internalType: "string",
             name: "agentName",
             type: "string",
+            internalType: "string",
           },
           {
-            internalType: "string",
             name: "agentId",
             type: "string",
+            internalType: "string",
           },
           {
-            internalType: "address",
             name: "owner",
             type: "address",
+            internalType: "address",
           },
           {
-            internalType: "string",
             name: "promiseSettlementData",
             type: "string",
+            internalType: "string",
           },
           {
-            components: [
-              {
-                internalType: "address",
-                name: "agentWallet",
-                type: "address",
-              },
-              {
-                internalType: "uint256",
-                name: "agentId",
-                type: "uint256",
-              },
-              {
-                internalType: "enum Kudo.CovenantStatus",
-                name: "status",
-                type: "uint8",
-              },
-              {
-                internalType: "string",
-                name: "nftType",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "ask",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "covenantPromise",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "promiseDetail",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "promiseSettlementData",
-                type: "string",
-              },
-              {
-                internalType: "string",
-                name: "askSettlementData",
-                type: "string",
-              },
-              {
-                internalType: "uint128",
-                name: "abilityScore",
-                type: "uint128",
-              },
-            ],
-            internalType: "struct Kudo.CovenantData",
             name: "covenantData",
             type: "tuple",
+            internalType: "struct Kudo.CovenantData",
+            components: [
+              {
+                name: "agentWallet",
+                type: "address",
+                internalType: "address",
+              },
+              {
+                name: "agentId",
+                type: "uint256",
+                internalType: "uint256",
+              },
+              {
+                name: "status",
+                type: "uint8",
+                internalType: "enum Kudo.CovenantStatus",
+              },
+              {
+                name: "nftType",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "ask",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "covenantPromise",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "promiseDetail",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "askSettlementData",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "promiseSettlementData",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "abilityScore",
+                type: "uint128",
+                internalType: "uint128",
+              },
+              {
+                name: "debtAmount",
+                type: "uint256",
+                internalType: "uint256",
+              },
+            ],
           },
         ],
-        internalType: "struct Kudo.CovenantDetails[]",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getCovenantsDetails",
+    inputs: [],
+    outputs: [
+      {
         name: "",
         type: "tuple[]",
+        internalType: "struct Kudo.CovenantDetails[]",
+        components: [
+          {
+            name: "nftId",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "agentName",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "agentId",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "owner",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "promiseSettlementData",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "covenantData",
+            type: "tuple",
+            internalType: "struct Kudo.CovenantData",
+            components: [
+              {
+                name: "agentWallet",
+                type: "address",
+                internalType: "address",
+              },
+              {
+                name: "agentId",
+                type: "uint256",
+                internalType: "uint256",
+              },
+              {
+                name: "status",
+                type: "uint8",
+                internalType: "enum Kudo.CovenantStatus",
+              },
+              {
+                name: "nftType",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "ask",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "covenantPromise",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "promiseDetail",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "askSettlementData",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "promiseSettlementData",
+                type: "string",
+                internalType: "string",
+              },
+              {
+                name: "abilityScore",
+                type: "uint128",
+                internalType: "uint128",
+              },
+              {
+                name: "debtAmount",
+                type: "uint256",
+                internalType: "uint256",
+              },
+            ],
+          },
+        ],
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "getCovenantsWithStatus",
     inputs: [
       {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
+        name: "status",
+        type: "uint8",
+        internalType: "enum Kudo.CovenantStatus",
       },
     ],
-    name: "getRoleAdmin",
     outputs: [
       {
-        internalType: "bytes32",
         name: "",
-        type: "bytes32",
+        type: "tuple[]",
+        internalType: "struct Kudo.CovenantData[]",
+        components: [
+          {
+            name: "agentWallet",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "agentId",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "status",
+            type: "uint8",
+            internalType: "enum Kudo.CovenantStatus",
+          },
+          {
+            name: "nftType",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "ask",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "covenantPromise",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "promiseDetail",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "askSettlementData",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "promiseSettlementData",
+            type: "string",
+            internalType: "string",
+          },
+          {
+            name: "abilityScore",
+            type: "uint128",
+            internalType: "uint128",
+          },
+          {
+            name: "debtAmount",
+            type: "uint256",
+            internalType: "uint256",
+          },
+        ],
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
+    type: "function",
+    name: "getCreditLimit",
+    inputs: [],
+    outputs: [
       {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
       },
     ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getIncomeScore",
+    inputs: [
+      {
+        name: "agent",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getPaymentScore",
+    inputs: [
+      {
+        name: "agent",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getRoleAdmin",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "grantRole",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+    ],
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "hasRole",
     inputs: [
       {
-        internalType: "bytes32",
         name: "role",
         type: "bytes32",
+        internalType: "bytes32",
       },
       {
-        internalType: "address",
         name: "account",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "hasRole",
     outputs: [
       {
-        internalType: "bool",
         name: "",
         type: "bool",
+        internalType: "bool",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "i_paymentHistory",
     inputs: [],
-    name: "i_identityRegistry",
     outputs: [
       {
-        internalType: "contract IIdentityRegistry",
         name: "",
         type: "address",
+        internalType: "contract IPaymentHistory",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
-    name: "i_validationRegistry",
-    outputs: [
-      {
-        internalType: "contract IValidationRegistry",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
-  },
-  {
+    name: "isApprovedForAll",
     inputs: [
       {
-        internalType: "address",
         name: "owner",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
         name: "operator",
         type: "address",
+        internalType: "address",
       },
     ],
-    name: "isApprovedForAll",
     outputs: [
       {
-        internalType: "bool",
         name: "",
         type: "bool",
+        internalType: "bool",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "mintCovenant",
     inputs: [
       {
-        internalType: "uint256",
         name: "agentId",
         type: "uint256",
+        internalType: "uint256",
       },
       {
-        internalType: "string",
+        name: "debtAmount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
         name: "covenantPromise",
         type: "string",
+        internalType: "string",
       },
       {
-        internalType: "string",
         name: "ask",
         type: "string",
+        internalType: "string",
       },
       {
-        internalType: "string",
         name: "nftType",
         type: "string",
+        internalType: "string",
       },
     ],
-    name: "mintCovenant",
     outputs: [
       {
-        internalType: "uint256",
         name: "",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "mintCovenantOnBehalfOf",
     inputs: [
       {
-        internalType: "address",
         name: "recipient",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
         name: "agentAddress",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "uint256",
         name: "agentId",
         type: "uint256",
+        internalType: "uint256",
       },
       {
-        internalType: "string",
+        name: "debtAmount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
         name: "covenantPromise",
         type: "string",
+        internalType: "string",
       },
       {
-        internalType: "string",
         name: "ask",
         type: "string",
+        internalType: "string",
       },
       {
-        internalType: "string",
         name: "nftType",
         type: "string",
+        internalType: "string",
       },
       {
-        internalType: "uint8",
         name: "v",
         type: "uint8",
+        internalType: "uint8",
       },
       {
-        internalType: "bytes32",
         name: "r",
         type: "bytes32",
+        internalType: "bytes32",
       },
       {
-        internalType: "bytes32",
         name: "s",
         type: "bytes32",
+        internalType: "bytes32",
       },
     ],
-    name: "mintCovenantOnBehalfOf",
     outputs: [
       {
-        internalType: "uint256",
         name: "",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "name",
+    inputs: [],
     outputs: [
       {
-        internalType: "string",
         name: "",
         type: "string",
+        internalType: "string",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "owner",
+    inputs: [],
     outputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "ownerOf",
     inputs: [
       {
-        internalType: "uint256",
         name: "tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "ownerOf",
     outputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "pendingDefaultAdmin",
+    inputs: [],
     outputs: [
       {
-        internalType: "address",
         name: "newAdmin",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "uint48",
         name: "schedule",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "pendingDefaultAdminDelay",
+    inputs: [],
     outputs: [
       {
-        internalType: "uint48",
         name: "newDelay",
         type: "uint48",
+        internalType: "uint48",
       },
       {
-        internalType: "uint48",
         name: "schedule",
         type: "uint48",
+        internalType: "uint48",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
+    type: "function",
     name: "renounceRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [
       {
-        internalType: "bytes32",
         name: "role",
         type: "bytes32",
+        internalType: "bytes32",
       },
       {
-        internalType: "address",
         name: "account",
         type: "address",
+        internalType: "address",
       },
     ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "revokeRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "rollbackDefaultAdminDelay",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [
       {
-        internalType: "address",
-        name: "from",
-        type: "address",
+        name: "role",
+        type: "bytes32",
+        internalType: "bytes32",
       },
       {
-        internalType: "address",
-        name: "to",
+        name: "account",
         type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
+        internalType: "address",
       },
     ],
-    name: "safeTransferFrom",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "rollbackDefaultAdminDelay",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "safeTransferFrom",
     inputs: [
       {
-        internalType: "address",
         name: "from",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
         name: "to",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "uint256",
         name: "tokenId",
         type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "safeTransferFrom",
+    inputs: [
+      {
+        name: "from",
+        type: "address",
+        internalType: "address",
       },
       {
-        internalType: "bytes",
+        name: "to",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
         name: "data",
         type: "bytes",
+        internalType: "bytes",
       },
     ],
-    name: "safeTransferFrom",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "setApprovalForAll",
     inputs: [
       {
-        internalType: "address",
         name: "operator",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "bool",
         name: "approved",
         type: "bool",
+        internalType: "bool",
       },
     ],
-    name: "setApprovalForAll",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "setAskSettlementData",
     inputs: [
       {
-        internalType: "uint256",
         name: "nftId",
         type: "uint256",
+        internalType: "uint256",
       },
       {
-        internalType: "string",
         name: "settlementData",
         type: "string",
+        internalType: "string",
       },
       {
-        internalType: "string",
         name: "promiseDetail",
         type: "string",
+        internalType: "string",
       },
     ],
-    name: "setAskSettlementData",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "setCovenantStatus",
     inputs: [
       {
-        internalType: "uint256",
         name: "nftId",
         type: "uint256",
+        internalType: "uint256",
       },
       {
-        internalType: "string",
+        name: "status",
+        type: "uint8",
+        internalType: "enum Kudo.CovenantStatus",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setPromiseSettlementData",
+    inputs: [
+      {
+        name: "nftId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
         name: "data",
         type: "string",
+        internalType: "string",
       },
       {
-        internalType: "string",
         name: "requestUri",
         type: "string",
+        internalType: "string",
       },
     ],
-    name: "setPromiseSettlementData",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "supportsInterface",
     inputs: [
       {
-        internalType: "bytes4",
         name: "interfaceId",
         type: "bytes4",
+        internalType: "bytes4",
       },
     ],
-    name: "supportsInterface",
     outputs: [
       {
-        internalType: "bool",
         name: "",
         type: "bool",
+        internalType: "bool",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "symbol",
+    inputs: [],
     outputs: [
       {
-        internalType: "string",
         name: "",
         type: "string",
+        internalType: "string",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "tokenURI",
     inputs: [
       {
-        internalType: "uint256",
         name: "tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "tokenURI",
     outputs: [
       {
-        internalType: "string",
         name: "",
         type: "string",
+        internalType: "string",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "transferFrom",
     inputs: [
       {
-        internalType: "address",
         name: "from",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
         name: "to",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "uint256",
         name: "tokenId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "transferFrom",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
+  },
+  {
+    type: "event",
+    name: "AgentSet",
+    inputs: [
+      {
+        name: "agentWallet",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "agentName",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+      {
+        name: "agentId",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+      {
+        name: "teeId",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Approval",
+    inputs: [
+      {
+        name: "owner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "approved",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ApprovalForAll",
+    inputs: [
+      {
+        name: "owner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "operator",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "approved",
+        type: "bool",
+        indexed: false,
+        internalType: "bool",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "AskSettlementSet",
+    inputs: [
+      {
+        name: "nftId",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "askSettlement",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+      {
+        name: "promiseDetails",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "CovenantAskSet",
+    inputs: [
+      {
+        name: "nftId",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "status",
+        type: "uint8",
+        indexed: false,
+        internalType: "enum Kudo.CovenantStatus",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "CovenantMinted",
+    inputs: [
+      {
+        name: "nftId",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "agent",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "nftType",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+      {
+        name: "covenantPromise",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+      {
+        name: "ask",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "CovenantPromiseSet",
+    inputs: [
+      {
+        name: "nftId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+      {
+        name: "status",
+        type: "uint8",
+        indexed: false,
+        internalType: "enum Kudo.CovenantStatus",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "CovenantRegistered",
+    inputs: [
+      {
+        name: "requestId",
+        type: "bytes32",
+        indexed: false,
+        internalType: "bytes32",
+      },
+      {
+        name: "agentWallet",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "nftId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "DefaultAdminDelayChangeCanceled",
+    inputs: [],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "DefaultAdminDelayChangeScheduled",
+    inputs: [
+      {
+        name: "newDelay",
+        type: "uint48",
+        indexed: false,
+        internalType: "uint48",
+      },
+      {
+        name: "effectSchedule",
+        type: "uint48",
+        indexed: false,
+        internalType: "uint48",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "DefaultAdminTransferCanceled",
+    inputs: [],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "DefaultAdminTransferScheduled",
+    inputs: [
+      {
+        name: "newAdmin",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "acceptSchedule",
+        type: "uint48",
+        indexed: false,
+        internalType: "uint48",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "PromiseSettlementSet",
+    inputs: [
+      {
+        name: "nftId",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "promiseSettlement",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RoleAdminChanged",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+      {
+        name: "previousAdminRole",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+      {
+        name: "newAdminRole",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RoleGranted",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+      {
+        name: "account",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RoleRevoked",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+      {
+        name: "account",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Transfer",
+    inputs: [
+      {
+        name: "from",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "to",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "error",
+    name: "AccessControlBadConfirmation",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "AccessControlEnforcedDefaultAdminDelay",
+    inputs: [
+      {
+        name: "schedule",
+        type: "uint48",
+        internalType: "uint48",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "AccessControlEnforcedDefaultAdminRules",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "AccessControlInvalidDefaultAdmin",
+    inputs: [
+      {
+        name: "defaultAdmin",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "AccessControlUnauthorizedAccount",
+    inputs: [
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "neededRole",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "AccessForbidden",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "AgentRegistered",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "ConditionIsNotMet",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "ERC721IncorrectOwner",
+    inputs: [
+      {
+        name: "sender",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "owner",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC721InsufficientApproval",
+    inputs: [
+      {
+        name: "operator",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC721InvalidApprover",
+    inputs: [
+      {
+        name: "approver",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC721InvalidOperator",
+    inputs: [
+      {
+        name: "operator",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC721InvalidOwner",
+    inputs: [
+      {
+        name: "owner",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC721InvalidReceiver",
+    inputs: [
+      {
+        name: "receiver",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC721InvalidSender",
+    inputs: [
+      {
+        name: "sender",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC721NonexistentToken",
+    inputs: [
+      {
+        name: "tokenId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "InvalidCovenantStatus",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidParameter",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidSignature",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "SafeCastOverflowedUintDowncast",
+    inputs: [
+      {
+        name: "bits",
+        type: "uint8",
+        internalType: "uint8",
+      },
+      {
+        name: "value",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
   },
 ];

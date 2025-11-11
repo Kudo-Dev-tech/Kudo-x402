@@ -47,6 +47,7 @@ export interface KudoPaymentParams {
     }
     covenantPromise: string 
     covenantAsk: string
+    debtAmount: string
   }
 
 export interface VerifyRequest {

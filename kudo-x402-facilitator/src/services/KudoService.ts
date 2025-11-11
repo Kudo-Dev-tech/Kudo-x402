@@ -30,13 +30,15 @@ export class KudoService {
                 covenantPromise: kudoPaymentParams.covenantPromise,
                 covenantAsk: kudoPaymentParams.covenantAsk,
                 paymentMethod: "CREDIT_CARD",
+                debtAmount: kudoPaymentParams.debtAmount,
                 amountPaid: 0
             });
 
             const tx = await contract.mintCovenantOnBehalfOf(
                 this.wallet.address,
                 kudoPaymentParams.agentAddr,
-                "1",
+                "449",
+                kudoPaymentParams.debtAmount,
                 kudoPaymentParams.covenantPromise,
                 kudoPaymentParams.covenantAsk,
                 "CREDIT_CARD",
